@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "388949476044",
+    "project_id": "whisper-connect-7fb42",
+    "storage_bucket": "whisper-connect-7fb42.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388949476044:android:8b144a6277e774380cb869",
+        "android_client_info": {
+          "package_name": "com.example.whisper_connect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGYWo-Iw3feiJ059ekGoPLV4NxuevsGSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
