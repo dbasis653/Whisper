@@ -41,8 +41,6 @@ class _MyLoginFormState extends State<MyLoginForm> {
   }
 
   void submit() async {
-    print('Submit starts here...');
-    // UserCredential userCredentials;
     final isValid = formKey.currentState!.validate();
     if (isValid) {
       formKey.currentState!.save();
@@ -74,11 +72,6 @@ class _MyLoginFormState extends State<MyLoginForm> {
           ScaffoldMessenger.of(context).clearSnackBars();
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('No Profile Picture Selected')));
-
-          // setState(() {
-          //   isAuthenticating = false;
-          // });
-          // return;
         }
 
         final userCredentials = await firebase.createUserWithEmailAndPassword(
@@ -155,10 +148,8 @@ class _MyLoginFormState extends State<MyLoginForm> {
           children: [
             if (!isLoginActive)
               UserImagePicker(
-                // onPickImage: (imageFile) =>  inputImage = imageFile,
                 onPickImage: (image) {
                   inputImage = image;
-                  print('Image is picked...');
                 },
               ),
             LoginFormTextField(

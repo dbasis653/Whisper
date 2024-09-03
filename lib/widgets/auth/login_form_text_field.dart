@@ -60,6 +60,7 @@ class LoginFormTextField extends StatelessWidget {
       textCapitalization: TextCapitalization.none,
       autocorrect: false,
       obscureText: title == 'Password' ? true : false,
+      cursorColor: Theme.of(context).colorScheme.onPrimary,
       validator: (value) {
         if (title == 'E-mail address') {
           return emailValidator(value);
