@@ -7,6 +7,9 @@ class FormButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // if (title == 'Signup') {
+    //   print('SignUP clicked...');
+    // }
     return ElevatedButton(
       style: ButtonStyle(
         elevation: const WidgetStatePropertyAll(8),

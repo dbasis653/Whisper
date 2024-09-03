@@ -3,6 +3,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:whisper_connect/widgets/auth/form_buttons.dart';
@@ -28,6 +30,7 @@ class _MyLoginFormState extends State<MyLoginForm> {
 
   String inputEmail = '';
   String inputPassword = '';
+  String inputUsername = '';
   File? inputImage;
   bool isAuthenticating = false;
 
@@ -38,6 +41,7 @@ class _MyLoginFormState extends State<MyLoginForm> {
   }
 
   void submit() async {
+    print('Submit starts here...');
     // UserCredential userCredentials;
     final isValid = formKey.currentState!.validate();
     if (isValid) {
@@ -52,7 +56,6 @@ class _MyLoginFormState extends State<MyLoginForm> {
       try {
         final userCredentials = await firebase.signInWithEmailAndPassword(
             email: inputEmail, password: inputPassword);
-        print(userCredentials);
       } on FirebaseAuthException catch (error) {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -62,23 +65,60 @@ class _MyLoginFormState extends State<MyLoginForm> {
         );
 
         setState(() {
-          isAuthenticating = true;
+          isAuthenticating = false;
         });
       }
     } else {
       try {
+        if (inputImage == null) {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('No Profile Picture Selected')));
+
+          // setState(() {
+          //   isAuthenticating = false;
+          // });
+          // return;
+        }
+
         final userCredentials = await firebase.createUserWithEmailAndPassword(
             email: inputEmail, password: inputPassword);
 
-        final storageRef = FirebaseStorage.instance
-            .ref()
-            .child('user_images')
-            .child('${userCredentials.user!.uid}.jpg');
+        if (inputImage == null) {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userCredentials.user!.uid)
+              .set({
+            'email': inputEmail,
+            'password': inputPassword,
+            'imageUrl': '',
+            // 'imageUrl': inputImage != null ? imageUrl : null,
+            'username': inputUsername,
+          });
+        }
 
-        await storageRef.putFile(inputImage!);
-        final imageUrl = await storageRef.getDownloadURL();
+        if (inputImage != null) {
+          final storageRef = FirebaseStorage.instance
+              .ref()
+              .child('user_images')
+              .child('${userCredentials.user!.uid}.jpg');
 
-        print('Image name : $storageRef');
+          await storageRef.putFile(inputImage!);
+          final imageUrl = await storageRef.getDownloadURL();
+
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userCredentials.user!.uid)
+              .set({
+            'email': inputEmail,
+            'password': inputPassword,
+            'imageUrl': imageUrl,
+            // 'imageUrl': inputImage != null ? imageUrl : null,
+            'username': inputUsername,
+          });
+        }
+
+        print('Files saved in database...');
       } on FirebaseAuthException catch (error) {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -88,7 +128,7 @@ class _MyLoginFormState extends State<MyLoginForm> {
         );
 
         setState(() {
-          isAuthenticating = true;
+          isAuthenticating = false;
         });
       }
     }
@@ -99,6 +139,7 @@ class _MyLoginFormState extends State<MyLoginForm> {
     void toogleIsLoginActive() {
       setState(() {
         isLoginActive = !isLoginActive;
+        formKey.currentState!.reset();
       });
       widget.convertIsLogin();
     }
@@ -114,7 +155,11 @@ class _MyLoginFormState extends State<MyLoginForm> {
           children: [
             if (!isLoginActive)
               UserImagePicker(
-                onPickImage: (imageFile) => inputImage = imageFile,
+                // onPickImage: (imageFile) =>  inputImage = imageFile,
+                onPickImage: (image) {
+                  inputImage = image;
+                  print('Image is picked...');
+                },
               ),
             LoginFormTextField(
               title: 'E-mail address',
@@ -129,6 +174,13 @@ class _MyLoginFormState extends State<MyLoginForm> {
                 inputPassword = value;
               },
             ),
+            if (!isLoginActive) const SizedBox(height: 15),
+            if (!isLoginActive)
+              LoginFormTextField(
+                  title: 'Username',
+                  onSavingTextField: (value) {
+                    inputUsername = value;
+                  }),
             const SizedBox(height: 15),
             if (!isAuthenticating)
               FormButtons(

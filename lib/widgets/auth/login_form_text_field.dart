@@ -25,6 +25,13 @@ class LoginFormTextField extends StatelessWidget {
       return null;
     }
 
+    String? usernameValidator(String? value) {
+      if (value == null || value.trim().isEmpty || value.trim().length < 3) {
+        return 'Usename should be of atleast three characters';
+      }
+      return null;
+    }
+
     return TextFormField(
       decoration: InputDecoration(
         label: Text(
@@ -59,6 +66,9 @@ class LoginFormTextField extends StatelessWidget {
         }
         if (title == 'Password') {
           return passwordValidator(value);
+        }
+        if (title == 'Username') {
+          return usernameValidator(value);
         }
         return null;
       },

@@ -24,6 +24,12 @@ class _UserImagePickerState extends State<UserImagePicker> {
         widget.onPickImage(selectedImageFile!);
       });
     }
+    // else {
+    //   setState(() {
+    //     selectedImageFile = File('assets/images/user_default_dp.jpg');
+    //     widget.onPickImage(selectedImageFile!);
+    //   });
+    // }
   }
 
   void pickImage() async {
@@ -36,6 +42,12 @@ class _UserImagePickerState extends State<UserImagePicker> {
         widget.onPickImage(selectedImageFile!);
       });
     }
+    // else {
+    //   setState(() {
+    //     selectedImageFile ??= File('assets/images/default_dp.jpg');
+    //     widget.onPickImage(selectedImageFile!);
+    //   });
+    // }
   }
 
   @override
