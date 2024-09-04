@@ -1,14 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ChatMessages extends StatelessWidget {
-  const ChatMessages({super.key});
+  const ChatMessages(
+      {super.key, required this.receivingUser, required this.charoomId});
+  final dynamic receivingUser;
+  final String charoomId;
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = FirebaseAuth.instance.currentUser;
+
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection('chat')
+          .collection('chat_room')
+          .doc(charoomId)
+          .collection('messages')
           .orderBy(
             'createdAt',
             descending: false,
@@ -31,18 +39,27 @@ class ChatMessages extends StatelessWidget {
           );
         }
 
-        // final userMessageData = FirebaseFirestore.instance.collection('chat');
         final loadedMessages = chatSnapshot.data!.docs;
 
         return ListView.builder(
-          padding:
-              const EdgeInsets.only(bottom: 30, left: 15, right: 15, top: 15),
-          // reverse: true,
-          itemCount: loadedMessages.length,
-          itemBuilder: (context, index) => Text(
-            loadedMessages[index].data()['message'],
-          ),
-        );
+            padding:
+                const EdgeInsets.only(bottom: 30, left: 15, right: 15, top: 15),
+            // reverse: true,
+            itemCount: loadedMessages.length,
+            itemBuilder: (context, index) {
+              bool isCurrentUser = currentUser!.uid ==
+                  chatSnapshot.data!.docs[index]['receiverId'];
+
+              Alignment alignment =
+                  isCurrentUser ? Alignment.centerLeft : Alignment.centerRight;
+              return Container(
+                alignment: alignment,
+                child: Text(
+                  // loadedMessages[index].data()['message'],
+                  loadedMessages[index].data()['message'],
+                ),
+              );
+            });
       },
     );
   }

@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:whisper_connect/screens/chat_screen.dart';
 import 'package:whisper_connect/screens/splash_screen.dart';
-import 'firebase_options.dart';
-
 import 'package:whisper_connect/screens/auth.dart';
+import 'package:whisper_connect/screens/all_chats.dart';
+import 'package:whisper_connect/screens/all_users.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const App());
+  runApp(const ProviderScope(child: App()));
 }
 
 class App extends StatelessWidget {
@@ -36,7 +39,7 @@ class App extends StatelessWidget {
             }
 
             if (snapshot.hasData) {
-              return ChatScreen();
+              return AllUsers();
             }
 
             return const AuthScreen();

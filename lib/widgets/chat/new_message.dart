@@ -2,14 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class NewMessage extends StatefulWidget {
-  const NewMessage({super.key});
+import 'package:whisper_connect/providers/all_chats_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class NewMessage extends ConsumerStatefulWidget {
+  const NewMessage(
+      {super.key, required this.receivingUser, required this.charoomId});
+  final dynamic receivingUser;
+  final String charoomId;
 
   @override
-  State<NewMessage> createState() => _NewMessageState();
+  ConsumerState<NewMessage> createState() => _NewMessageState();
 }
 
-class _NewMessageState extends State<NewMessage> {
+class _NewMessageState extends ConsumerState<NewMessage> {
   final messageController = TextEditingController();
 
   @override
@@ -28,18 +34,25 @@ class _NewMessageState extends State<NewMessage> {
     messageController.clear();
     FocusScope.of(context).unfocus();
 
-    final user = FirebaseAuth.instance.currentUser!;
+    final currentUser = FirebaseAuth.instance.currentUser!;
     final userData = await FirebaseFirestore.instance
         .collection('users')
-        .doc(user.uid)
+        .doc(currentUser.uid)
         .get();
 
-    FirebaseFirestore.instance.collection('chat').add({
-      'message': enteredMessage,
-      'userId': user.uid,
-      'createdAt': Timestamp.now(),
+    FirebaseFirestore.instance
+        .collection('chat_room')
+        .doc(widget.charoomId)
+        .collection('messages')
+        .add({
+      'userId': currentUser.uid,
+      'receiverId': widget.receivingUser.id,
+      'receiverUsername': widget.receivingUser['username'],
+      'chatroomId': widget.charoomId,
       'username': userData.data()!['username'],
       'userImage': userData.data()!['imageUrl'],
+      'message': enteredMessage,
+      'createdAt': Timestamp.now(),
     });
   }
 
