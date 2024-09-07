@@ -15,8 +15,6 @@ class ChatScreen extends StatelessWidget {
     final ids = [currentUser.uid, receivingUser.id];
     ids.sort();
     final chatroomId = ids.join('_');
-    // print('CurrentUser id: ${currentUser.uid}');
-    // print('receivingUser id: ${receivingUser.id}');
 
     return Scaffold(
       backgroundColor: const Color(0xFF0097b2),
@@ -25,10 +23,15 @@ class ChatScreen extends StatelessWidget {
         title: Text(receivingUser['username']),
         actions: [
           IconButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              icon: const Icon(Icons.logout_sharp))
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.logout_sharp,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
+          ),
         ],
       ),
       body: Column(
