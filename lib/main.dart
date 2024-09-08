@@ -5,10 +5,8 @@ import 'firebase_options.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:whisper_connect/screens/chat_screen.dart';
 import 'package:whisper_connect/screens/splash_screen.dart';
 import 'package:whisper_connect/screens/auth.dart';
-import 'package:whisper_connect/screens/all_chats.dart';
 import 'package:whisper_connect/screens/all_users.dart';
 
 void main() async {
@@ -39,7 +37,7 @@ class App extends StatelessWidget {
             }
 
             if (snapshot.hasData) {
-              return AllUsers();
+              return const AllUsers();
             }
 
             return const AuthScreen();

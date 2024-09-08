@@ -52,7 +52,7 @@ class _MyLoginFormState extends State<MyLoginForm> {
 
     if (isLoginActive) {
       try {
-        final userCredentials = await firebase.signInWithEmailAndPassword(
+        await firebase.signInWithEmailAndPassword(
             email: inputEmail, password: inputPassword);
       } on FirebaseAuthException catch (error) {
         ScaffoldMessenger.of(context).clearSnackBars();
@@ -85,7 +85,6 @@ class _MyLoginFormState extends State<MyLoginForm> {
             'email': inputEmail,
             'password': inputPassword,
             'imageUrl': '',
-            // 'imageUrl': inputImage != null ? imageUrl : null,
             'username': inputUsername,
           });
         }
@@ -110,8 +109,6 @@ class _MyLoginFormState extends State<MyLoginForm> {
             'username': inputUsername,
           });
         }
-
-        print('Files saved in database...');
       } on FirebaseAuthException catch (error) {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(

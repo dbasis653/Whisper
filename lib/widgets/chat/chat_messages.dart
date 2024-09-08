@@ -44,7 +44,6 @@ class ChatMessages extends StatelessWidget {
         return ListView.builder(
             padding:
                 const EdgeInsets.only(bottom: 30, left: 15, right: 15, top: 15),
-            // reverse: true,
             itemCount: loadedMessages.length,
             itemBuilder: (context, index) {
               bool isCurrentUser = currentUser!.uid ==
@@ -55,7 +54,6 @@ class ChatMessages extends StatelessWidget {
               return Container(
                 alignment: alignment,
                 child: Text(
-                  // loadedMessages[index].data()['message'],
                   loadedMessages[index].data()['message'],
                 ),
               );

@@ -31,7 +31,7 @@ class AllUsers extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => AllUsers(),
+                  builder: (context) => const AllUsers(),
                 ),
               );
             },
@@ -45,7 +45,6 @@ class AllUsers extends StatelessWidget {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('users').snapshots(),
         builder: (context, userSnapshot) {
-          // final currentUid = FirebaseAuth.instance.currentUser!.uid;
           final currentUser = FirebaseAuth.instance.currentUser;
 
           if (userSnapshot.connectionState == ConnectionState.waiting) {
@@ -68,11 +67,6 @@ class AllUsers extends StatelessWidget {
               child: Text('No users found.'),
             );
           }
-
-          // loadedUsers = userSnapshot.data!.docs;
-
-          // loadedUsers =
-          //     userSnapshot.data!.docs.where((m) => m.id != currentUid).toList();
 
           loadedUsers = userSnapshot.data!.docs
               .where((m) => m.id != currentUser!.uid)
@@ -98,7 +92,7 @@ class AllUsers extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListTile(
-                    // leading: loadedUsers[index].data()['imageUrl'],
+                    
                     title: Text(
                       loadedUsers[index].data()['username'],
                       style: TextStyle(

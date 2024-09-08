@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:whisper_connect/providers/all_chats_provider.dart';
+// import 'package:whisper_connect/providers/all_chats_provider.dart';
 
 import 'package:whisper_connect/screens/all_users.dart';
 
@@ -63,7 +63,7 @@ class _AllChatsState extends ConsumerState<AllChats> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => AllUsers(),
+                      builder: (context) => const AllUsers(),
                     ),
                   );
                 },
