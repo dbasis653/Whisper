@@ -105,7 +105,6 @@ class _MyLoginFormState extends State<MyLoginForm> {
             'email': inputEmail,
             'password': inputPassword,
             'imageUrl': imageUrl,
-            // 'imageUrl': inputImage != null ? imageUrl : null,
             'username': inputUsername,
           });
         }
